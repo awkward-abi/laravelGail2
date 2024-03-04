@@ -2,7 +2,6 @@ import './bootstrap';
 
 import {createApp} from 'vue';
 import { createRouter, createWebHistory, RouterLink, RouterView  } from 'vue-router';
-
 import VueAxios from 'vue-axios';
 import axios from 'axios';
 import App from './components/App.vue';
@@ -11,8 +10,8 @@ import Home from './components/Home.vue';
 import Add from './components/category/Add.vue';
 import Edit from './components/category/Edit.vue';
 import List from './components/category/List.vue';
-
-
+import PrimeVue from 'primevue/config';
+import 'primevue/resources/themes/aura-light-green/theme.css'
 
 const routes = [
   {
@@ -43,7 +42,6 @@ const routes = [
   ];
 
 
-  
 const router = createRouter({
   history: createWebHistory(),
   routes,
@@ -51,6 +49,7 @@ const router = createRouter({
 
 const app = createApp(App);
 app.use(router);
+app.use(PrimeVue);
 app.mount('#app');
 
 

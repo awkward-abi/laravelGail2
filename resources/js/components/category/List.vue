@@ -1,3 +1,4 @@
+
 <template>
     <div class="row">
         <div class="col-12 mb-2 text-end">
@@ -9,32 +10,11 @@
                     </div>
                     <div class="card-body">
                         <div class="table-responsive">
-                            <table class="table table-bordered display" id="table">
-                                <thead class="table-dark">
-                                    <tr>
-                                        <th scope="col">ID</th>
-                                        <th scope="col">Title</th>
-                                        <th scope="col">Description</th>
-                                        <th scope="col">Actions</th>
-                                    </tr>
-                                </thead>
-                                <tbody v-if="categories.length > 0">
-                                    <tr v-for="(category,key) in categories" :key="category.id"> 
-                                        <td class="text-center">{{ category.id }}</td>
-                                        <td class="text-center">{{ category.title }}</td>
-                                        <td>{{ category.description }}</td>
-                                        <td>
-                                            <router-link :to='{name:"Edit",params:{id:category.id}}' class="btn btn-success">Edit</router-link>
-                                            <button type="button" @click="deleteCategory(category.id)" class="btn btn-danger">Delete</button>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                                <tbody v-else>
-                                    <tr>
-                                        <td colspan="4" align="center"> No categories found</td>
-                                    </tr>
-                                </tbody>
-                         </table>
+                            <DataTable :value="categories" paginator :rows="5" :rowsPerPageOptions="[5, 10, 20, 50]" tableStyle="min-width: 50rem">
+                                <Column field="id" header="Id" style="width: 25%"></Column>
+                                <Column field="title" header="Title" style="width: 25%"></Column>
+                                <Column field="description" header="Description" style="width: 25%"></Column>
+                            </DataTable>
                         </div>
                     </div>
                 </div>
@@ -44,9 +24,19 @@
 </template>
 
 <script>
+import DataTable from 'primevue/datatable';
+import Column from 'primevue/column';
+import ColumnGroup from 'primevue/columngroup';   // optional
+import Row from 'primevue/row'; 
 
 export default{
     name:"categories",
+    components: {
+        DataTable,
+        Column,
+        ColumnGroup,
+        Row
+    },
     data(){
         return{
             categories:[]
@@ -63,14 +53,14 @@ export default{
                 console.log(error)
                 this.categories=[]
             })
-            $('#table').DataTable({
-                "iDisplayLength": 10,
-                "pageLength": 10,
-                columnDefs: [{
-                    "defaultContent": "-",
-                    "targets": "_all"
-                }]
-            });
+            // $('#table').DataTable({
+            //     "iDisplayLength": 10,
+            //     "pageLength": 10,
+            //     columnDefs: [{
+            //         "defaultContent": "-",
+            //         "targets": "_all"
+            //     }]
+            // });
         },
         deleteCategory(id){
             if(confirm("Are you sure to delete this category?")){
