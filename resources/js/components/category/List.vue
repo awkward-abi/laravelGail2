@@ -14,7 +14,6 @@
                                         v-model:filters="filters"
                                         :value="categories" 
                                         dataKey="id"
-                                        :loading="loading"
                                         paginator 
                                         stripedRows
                                         :rows="5" 
@@ -26,6 +25,15 @@
                                 <Column field="id" header="Id" style="width: 25%"></Column>
                                 <Column field="title" header="Title" style="width: 25%"></Column>
                                 <Column field="description" header="Description" style="width: 25%"></Column>
+                                <Column field="action" header="Action" style="width: 25%">
+                                    <template #body="slotProps">
+
+                                        <router-link  :to='{name:"Edit",params:{id:slotProps.data.id}}' class="btn btn-success">Edit</router-link>
+                                        
+                                        <button class="btn-danger btn"@click="deleteCategory(slotProps.data.id)" >delete</button>
+
+                                    </template>   
+                                </Column>
                             </DataTable>
                         </div>
                     </div>
@@ -43,10 +51,16 @@ import Row from 'primevue/row';
 import InputText from 'primevue/inputtext';
 import { ref, onMounted } from 'vue';
 import { FilterMatchMode } from 'primevue/api';
+import { RouterLink } from 'vue-router';
+import { list } from 'postcss';
 
-const filters = ref({
-    
-});
+
+import Breadcrumb from 'primevue/breadcrumb';
+
+const item = ref([
+    { label: 'Edit', route: '/edit' },
+    //{ label: 'Delete', route: '/inputtext' }
+]);
 
 export default {
     name: "categories",
@@ -55,7 +69,8 @@ export default {
         Column,
         ColumnGroup,
         Row,
-        InputText
+        InputText,
+        Breadcrumb
     },
     data() {  
         return {
@@ -79,8 +94,15 @@ export default {
                 this.categories = [];
             }
         },
+
+        
+
+        // editCategory(){
+        //     :to='{name:"Edit",params:{id:category.id}, route:"/edit"}'
+        // },
     
         deleteCategory(id) {
+            console.log(id)
             if (confirm("Are you sure to delete this category?")) {
                 axios.delete(`/api/category/delete/${id}`).then(response => {
                     this.getCategories();
