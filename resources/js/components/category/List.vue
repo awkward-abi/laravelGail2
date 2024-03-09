@@ -22,15 +22,17 @@
                                      <InputText v-model="filters['global'].value" placeholder="Keyword Search" />   
                                 <template #empty> No customers found. </template>
                                 <template #loading> Loading customers data. Please wait. </template>
-                                <Column field="id" header="Id" style="width: 25%"></Column>
-                                <Column field="title" header="Title" style="width: 25%"></Column>
+                                <Column field="id" header="Id" style="width: 5%"></Column>
+                                <Column field="title" header="Title" style="width: 15%"></Column>
+                                <Column field="parent_id" header="Parent Id" style="width: 15%"></Column>
+                                <Column field="parent_title" header="Parent Title" style="width: 15%"></Column>
                                 <Column field="description" header="Description" style="width: 25%"></Column>
                                 <Column field="action" header="Action" style="width: 25%">
                                     <template #body="slotProps">
 
                                         <router-link  :to='{name:"Edit",params:{id:slotProps.data.id}}' class="btn btn-success">Edit</router-link>
                                         
-                                        <button class="btn-danger btn"@click="deleteCategory(slotProps.data.id)" >delete</button>
+                                        <button class="btn-danger btn" @click="deleteCategory(slotProps.data.id)" >delete</button>
 
                                     </template>   
                                 </Column>
@@ -77,14 +79,14 @@ export default {
             categories: [],
             filters: {
                 global: { value: null, matchMode: FilterMatchMode.CONTAINS },  
-            },
-            searchValue: ''
+            }
         }
     },
     mounted() {
         this.getCategories();
     },
     methods: {
+
         async getCategories() {
             try {
                 const response = await axios.get('http://localhost:8000/api/category');
@@ -94,12 +96,6 @@ export default {
                 this.categories = [];
             }
         },
-
-        
-
-        // editCategory(){
-        //     :to='{name:"Edit",params:{id:category.id}, route:"/edit"}'
-        // },
     
         deleteCategory(id) {
             console.log(id)
