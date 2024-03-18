@@ -19,26 +19,23 @@
                                         <input type="text" class="form-control" v-model="model.category.description">
                                     </div>
                                 </div>
-                                <div class="col-sm-12">
-                                    <div class="form-group" >
-                                        <label>Select Parent Category</label>
-                                            <select class='form-control' v-model='selectedTitle'>
-                                                <option value='0'>Select Parent Category</option>
-                                                <option v-for="
-                                                category in model.parent_categories" :value="category.id" 
-                                                :selected="selectedTitle == category.id" 
-                                                :key="category.id"
-                                                >
-                                                {{ category.title }}
-                                                </option>
 
-                                        </select>
-                                    </div>
-                                    
-                                </div>
                                 <div class="col-12 mb-2">
-                                    <button type="button" @click="update(model.category.id)" class="btn btn-primary">Update </button>
-
+                                    <div class="form-group"> 
+                                        <Button label="Add Subcategory" @click="addNewSubcategory" />
+                                        <div class="sub_container"> 
+                                            <template v-for="(group, index) in model.subcategories" :key="index">
+                                                <InputGroup class="m-2 w-75" v-if="group.visible">
+                                                    <InputText v-model="group.subcategory" placeholder="Input Subcategory" />
+                                                    <Button icon="pi pi-times" severity="danger" @click="removeSubcategory(index)"/>
+                                                </InputGroup> 
+                                            </template>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="col-12 mb-2">
+                                    <button type="button" @click="update(model.category.id)" class="btn btn-primary">Update </button> 
                                 </div>
                             </div>
                         </div>
@@ -50,8 +47,25 @@
 </template>
 
 <script>
+
+import { ref } from 'vue'
+import Dialog from 'primevue/dialog';
+import Button from 'primevue/button';
+import Checkbox from 'primevue/checkbox';
+import InputGroup from 'primevue/inputgroup';
+import InputText from 'primevue/inputtext';
+
+const open = ref(false)
+
 export default {
     name:"update-Category",
+    components: {
+      Button,
+      Dialog,
+      Checkbox,
+      InputGroup,
+      InputText
+    },
     data(){
         return{
             model: {
@@ -61,14 +75,14 @@ export default {
                     title: [],
                     description:''
                 },
-                parent_categories: []
+                subcategories: [],
             },
             selectedTitle: null
         }
     },
     mounted() {
     this.showCategory()
-    this.getCategoryTitle();
+    //this.getCategoryTitle();
      },
 
     methods:{
@@ -78,18 +92,19 @@ export default {
                 this.selectedTitle = response.data.parent_id
             }).catch(error=>{
                 console.log(error)
-            })
+            }) 
         },
+        addNewSubcategory() {
+            this.model.subcategories.push({ visible: true }); // Add new visible group
+        },
+        removeSubcategory(index) {
+            this.model.subcategories.splice(index, 1);
+        },
+        async update(){ 
+            console.log(this.model.subcategories);
 
-        async getCategoryTitle() {
-            axios.get('/api/category/getCategoryTitle')
-              .then(function (response) { 
-                 this.model.parent_categories = response.data;
-                 console.log(this.model.parent_categories)
-              }.bind(this));
-        },
-        async update(){
-            await axios.put(`/api/category/edit/${this.$route.params.id}`,this.model.category).then(response=>{
+
+            await axios.put(`/api/category/edit/${this.$route.params.id}`,this.model).then(response=>{
                 this.$router.push({name:"List"})
             }).catch(error=>{
                 console.log(error)

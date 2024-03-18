@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers;
 
+
+
 use App\Models\Category;
+use App\Models\SubCategory;
 use Illuminate\Http\Request;
 
 class CategoryController extends Controller
@@ -13,23 +16,6 @@ class CategoryController extends Controller
     public function index()
     {
         $categories = Category::all();
-
-        // Loop through all categories
-        foreach ($categories as $key => $category) {
-            $categories[$key]['parent_title'] = null; // sa simula palang naka null na toh para maready na mapoppulate ng data  :3 uwu
-            // Check if a parent category exists (assuming 'parent_id' field)
-            if (isset($category->parent_id)) { //search mo isset (means pag hindi sya empty eto gagawin...)
-                $parent = Category::find($category->parent_id); //taga kuha ng category pag may laman based sa isset
-
-                // If parent category is found and has a title
-                if ($parent && $parent->title) {
-                    $categories[$key]['parent_title'] = $parent->title; // Add 'parent' key with parent title
-                } // Set 'parent' to null if parent not found
-                
-            }
-        }
-        
-        // Return JSON response with the structured parent categories
         return response()->json($categories);
         
     }
@@ -78,11 +64,22 @@ class CategoryController extends Controller
      */
     public function update($id ,Request $request)
     {
-        $category = Category::where('id', $id)->update($request->all());
-        return response()->json([
-            'message'=>'Category Updated Successfully!!',
-            'category'=>$category
-        ]);
+        $category = Category::where('id', $id)->update([ 
+            'title' => $request["category"]["title"],
+            'description' => $request["category"]["description"],
+             'updated_at' => now()
+        ]); 
+    
+        //add saving for subcat. Kunin ung request frm frontend to heree (ung subcat)
+        $subcategories = [];
+            foreach ($request['subcategories'] as $subcat) {
+                $subcategories[] = [
+                    'category_id' => $id,
+                    'sub_title' => $subcat['subcategory']
+                ];
+            }
+
+        SubCategory::insert($subcategories);
     }
 
     /**
@@ -101,6 +98,15 @@ class CategoryController extends Controller
     {
         $data = Category::get();
         return response()->json($data);
+    }
+
+    public function showSubCategories($id){
+        // displays all the subcategories based on their parent id
+        // category/4/subcategory
+        $categories = Category::where('id', $id)
+                                ->with('subcategories') 
+                                ->get();
+        return response()->json($categories);
     }
 
     
