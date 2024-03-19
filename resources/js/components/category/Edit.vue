@@ -82,7 +82,6 @@ export default {
     },
     mounted() {
     this.showCategory()
-    //this.getCategoryTitle();
      },
 
     methods:{
@@ -95,7 +94,7 @@ export default {
             }) 
         },
         addNewSubcategory() {
-            this.model.subcategories.push({ visible: true }); // Add new visible group
+            this.model.subcategories.push({ visible: true }); 
         },
         removeSubcategory(index) {
             this.model.subcategories.splice(index, 1);

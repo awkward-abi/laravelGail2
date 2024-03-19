@@ -18,16 +18,6 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Routing\Router;
 
 
-
-// Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-//     return $request->user();
-// });
-
-// Route::post('/category', function () {
-//     $categories = DB::table('categories')->get();
-//     return response()->json($categories);
-// });
-
 Route::get('/category', [CategoryController::class, 'index']);
 Route::post('/category/add', [CategoryController::class,'store']);
 Route::get('/category/getCategoryTitle', [CategoryController::class,'getCategoryTitle']);

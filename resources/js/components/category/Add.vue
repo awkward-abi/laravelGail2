@@ -19,7 +19,6 @@
                                         <input type="text" class="form-control" v-model="model.category.description">
                                     </div>
                                 </div>
-                                </div>
                                 <div class="col-12 mb-2">
                                     <button type="button" class="btn btn-primary" @click="create">Save</button>
                                 </div>

@@ -24,15 +24,6 @@
                                 <template #loading> Loading customers data. Please wait. </template>
                                 <Column field="id" header="Id" style="width: 5%"></Column>
                                 <Column field="sub_title" header="Subcategory Title" style="width: 15%"></Column>
-                                <!-- <Column field="action" header="Action" style="width: 25%">
-                                    <template #body="slotProps">
-
-                                        <router-link  :to='{name:"Edit",params:{id:slotProps.data.id}}' class="btn btn-success">Edit</router-link>
-                                        
-                                        <button class="btn-danger btn" @click="deleteCategory(slotProps.data.id)" >delete</button>
-
-                                    </template>    
-                                </Column>-->
                             </DataTable>
                         </div>
                     </div>
@@ -53,12 +44,6 @@ import { FilterMatchMode } from 'primevue/api';
 import { RouterLink } from 'vue-router';
 import { list } from 'postcss';
 
-
-
-// const item = ref([
-//     { label: 'Edit', route: '/edit' },
-//     //{ label: 'Delete', route: '/inputtext' }
-// ]);
 
 export default {
     name: "subcategories",
@@ -92,18 +77,6 @@ export default {
                 console.log(error);
             })
         },
-    
-        // deleteSubCategory(id) {
-        //     console.log(id)
-        //     if (confirm("Are you sure to delete this category?")) {
-        //         axios.delete(`/api/subcategory/delete/${id}`).then(response => {
-        //             this.getCategories();
-        //             console.log(this);
-        //         }).catch(error => {
-        //             console.log(error);
-        //         });
-        //     }
-        // }
         
     }
 }

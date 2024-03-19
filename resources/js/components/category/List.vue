@@ -32,10 +32,7 @@
                                         
                                         <button class="btn-danger btn m-2" @click="deleteCategory(slotProps.data.id)">Delete</button>
 
-                                        <button type="button" class="btn-primary btn m-2" @click="$router.push({ name: 'SubcategoryList', params: { id: slotProps.data.id } })">View Subcategory list</button>
-
-                                        <div>{{ slotProps.data.id }}</div>
-
+                                        <router-link class="btn-primary btn m-2" :to='{name:"SubcategoryList",params: { id: slotProps.data.id }}'>View Subcategory List</router-link>
 
                                     </template>   
                                 </Column>
@@ -65,7 +62,6 @@ import Breadcrumb from 'primevue/breadcrumb';
 const item = ref([
     { label: 'Edit', route: '/edit' },
     { label: 'SubcategoryList', route: '/subcategory' },
-    //{ label: 'Delete', route: '/inputtext' }
 ]);
 
 export default {
@@ -99,18 +95,8 @@ export default {
                 this.categories = [];
             }
         },
-
-        // showChildCategory(id){
-        //     axios.get(`http://localhost:8000/api/category/${id}/subcategory`).then(response => {
-        //         console.log(response.data);
-        //     }).catch(error => {
-        //         console.log(error);
-        //     })
-        // },
-
     
         deleteCategory(id) {
-            console.log(id)
             if (confirm("Are you sure to delete this category?")) {
                 axios.delete(`/api/category/delete/${id}`).then(response => {
                     this.getCategories();
