@@ -70,7 +70,7 @@ class CategoryController extends Controller
              'updated_at' => now()
         ]); 
     
-        //add saving for subcat. Kunin ung request frm frontend to heree (ung subcat)
+        //saving for the subcategory
         $subcategories = [];
             foreach ($request['subcategories'] as $subcat) {
                 $subcategories[] = [
@@ -101,8 +101,6 @@ class CategoryController extends Controller
     }
 
     public function showSubCategories($id){
-        // displays all the subcategories based on their parent id
-        // category/4/subcategory
         $categories = Category::where('id', $id)
                                 ->with('subcategories') 
                                 ->get();

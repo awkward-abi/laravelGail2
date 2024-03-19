@@ -10,6 +10,7 @@ import Home from './components/Home.vue';
 import Add from './components/category/Add.vue';
 import Edit from './components/category/Edit.vue';
 import List from './components/category/List.vue';
+import SubcategoryList from './components/subcategory/List.vue';
 import PrimeVue from 'primevue/config';
 import 'primevue/resources/themes/aura-light-green/theme.css'
 
@@ -38,6 +39,11 @@ const routes = [
       path: "/category/list",
       name: "List",
       component: List,
+    },
+    {
+      path: "/category/:id/subcategory",
+      name: "SubcategoryList",
+      component: SubcategoryList,
     },
   ];
 
