@@ -32,7 +32,9 @@
                                         
                                         <button class="btn-danger btn m-2" @click="deleteCategory(slotProps.data.id)">Delete</button>
 
-                                        <button type="button" class="btn-primary btn m-2" @click="$router.push({ name: 'SubCategoryList', params: { id: slotProps.data.id } })">View Subcategory list</button>
+                                        <button type="button" class="btn-primary btn m-2" @click="$router.push({ name: 'SubcategoryList', params: { id: slotProps.data.id } })">View Subcategory list</button>
+
+                                        <div>{{ slotProps.data.id }}</div>
 
 
                                     </template>   
@@ -62,6 +64,7 @@ import Breadcrumb from 'primevue/breadcrumb';
 
 const item = ref([
     { label: 'Edit', route: '/edit' },
+    { label: 'SubcategoryList', route: '/subcategory' },
     //{ label: 'Delete', route: '/inputtext' }
 ]);
 
