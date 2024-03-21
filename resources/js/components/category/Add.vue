@@ -40,7 +40,6 @@ export default {
         return{
             model: { //model property serves as the source of data for your component
                 category: {
-                    parent_id: null,
                     title: '',
                     title: [],
                     description:''

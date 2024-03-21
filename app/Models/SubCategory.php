@@ -5,15 +5,23 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Category;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class SubCategory extends Model
 {
 
-    protected $table = 'subcategories';
+    protected $table = 'sub_categories';
     protected $primaryKey ='id';
 
-    public function category()
+    protected $fillable = [
+        'id',
+        'sub_title'
+    ];    
+    
+
+    public function category(): BelongsToMany
     {
-        return $this->belongsTo(Category::class);
+        //code review maya
+        return $this->belongsToMany(Category::class,'category_sub_category');
     }
 }

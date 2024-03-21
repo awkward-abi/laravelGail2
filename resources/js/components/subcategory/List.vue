@@ -3,10 +3,8 @@
         <div class="col-12 mb-2 text-end">
             <div class="col-12">
                 <div class="card">
-                    <div class="card-header d-flex">
-                        <h4>{{ parent_title }}<span>-</span></h4> 
-
-                        <h4>Subcategory List</h4>
+                    <div class="card-header">
+                        <h4>SubCategory</h4>
                     </div>
                     <div class="card-body">
                         <div class="table-responsive">
@@ -17,13 +15,20 @@
                                         paginator 
                                         stripedRows
                                         :rows="5" 
-                                        :globalFilterFields="['id', 'sub_title', 'category_id']"
+                                        :globalFilterFields="['id', 'sub_title']"
                                         :rowsPerPageOptions="[5, 10, 20, 50]" tableStyle="min-width: 50rem">
                                      <InputText v-model="filters['global'].value" placeholder="Keyword Search" />   
-                                <template #empty> No customers found. </template>
-                                <template #loading> Loading customers data. Please wait. </template>
+                                <template #empty> No subcategory found. </template>
+                                <template #loading> Loading subcategory data. Please wait. </template>
                                 <Column field="id" header="Id" style="width: 5%"></Column>
-                                <Column field="sub_title" header="Subcategory Title" style="width: 15%"></Column>
+                                <Column field="sub_title" header="Title" style="width: 15%"></Column>
+                                <Column field="action" header="Action" style="width: 25%">
+                                    <template #body="slotProps">
+
+                                        <button class="btn-danger btn m-2" @click="deleteSubCategory(slotProps.data.id)">Delete</button>
+
+                                    </template>   
+                                </Column>
                             </DataTable>
                         </div>
                     </div>
@@ -44,6 +49,12 @@ import { FilterMatchMode } from 'primevue/api';
 import { RouterLink } from 'vue-router';
 import { list } from 'postcss';
 
+import Breadcrumb from 'primevue/breadcrumb';
+
+const item = ref([
+    { label: 'Edit', route: '/edit' },
+    { label: 'SubcategoryList', route: '/subcategory' },
+]);
 
 export default {
     name: "subcategories",
@@ -52,12 +63,12 @@ export default {
         Column,
         ColumnGroup,
         Row,
-        InputText
+        InputText,
+        Breadcrumb
     },
     data() {  
         return {
             subcategories: [],
-            parent_title: "(loading)",
             filters: {
                 global: { value: null, matchMode: FilterMatchMode.CONTAINS },  
             }
@@ -68,18 +79,31 @@ export default {
     },
     methods: {
         async getSubCategories() {
-            const id = window.location.pathname.split('/')[2]; //to call the 2nd segment
-            axios.get(`http://localhost:8000/api/category/${id}/subcategory`).then(response => {
-                this.subcategories = response.data[0]['subcategories']; //to call the array of subcategories base sa index[] ng category
-                this.parent_title = response.data[0]['title'];
-                console.log(this.subcategories)
-            }).catch(error => {
+            try {
+                const currentUrl = window.location.pathname;
+                const categoryId = currentUrl.split('/')[2];
+                const response = await axios.get(`http://localhost:8000/api/category/${categoryId}/subcategory`);
+                this.subcategories = response.data[0]['subcategories'];
+                console.log(this.subcategories);
+            } catch (error) {
                 console.log(error);
-            })
+                this.subcategories = [];
+            }
         },
+    
+        deleteSubCategory(id) {
+            console.log(id);
+            // if (confirm("Are you sure to delete this category?")) {
+            //     axios.delete(`/api/category/delete/${id}`).then(response => {
+            //         this.getCategories();
+            //         console.log(this);
+            //     }).catch(error => {
+            //         console.log(error);
+            //     });
+            // }
+        }
         
     }
 }
 
 </script>
-

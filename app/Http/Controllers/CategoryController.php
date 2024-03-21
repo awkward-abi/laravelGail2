@@ -39,7 +39,6 @@ class CategoryController extends Controller
             'category'=> $category
         
         ]);
-        
     }
 
     /**
@@ -67,20 +66,26 @@ class CategoryController extends Controller
         $category = Category::where('id', $id)->update([ 
             'title' => $request["category"]["title"],
             'description' => $request["category"]["description"],
-             'updated_at' => now()
+            'updated_at' => now()
         ]); 
     
-        //saving for the subcategory
-        $subcategories = [];
+        //saving for the subcategory 
             foreach ($request['subcategories'] as $subcat) {
                 $subcategories[] = [
-                    'category_id' => $id,
-                    'sub_title' => $subcat['subcategory']
+                    'sub_title' => $subcat['subcategory'],
+                    'created_at' => now()
                 ];
             }
-
         SubCategory::insert($subcategories);
+            //code review ko maya
+            $category = Category::findOrFail($id);
+            $subcategoriesId = SubCategory::pluck('id');
+            // Retrieve the subcategory instances
+            $subcategories = SubCategory::find($subcategoriesId);
+            // Attach subcategories to the category
+            $category->subcategories()->attach($subcategories->pluck('id'));  
     }
+        
 
     /**
      * Remove the specified resource from storage.
@@ -90,9 +95,18 @@ class CategoryController extends Controller
         $category = Category::find($id)->delete();
         return response()->json([
             'message'=> 'Why mo naman delete? :(',
-
             ]);
     }
+
+
+    //
+    public function destroySubCategory($categoryId, $subcategoryId) {
+        dd($categoryId, $subcategoryId);
+        // $category->subcategories()->detach($subcategory->id);
+        // return response()->json();
+      }
+      
+    
 
     public function getCategoryTitle(Request $request)
     {

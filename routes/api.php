@@ -26,8 +26,10 @@ Route::delete('/category/delete/{id}', [CategoryController::class,'destroy']);
 Route::put('/category/edit/{id}', [CategoryController::class,'update']);
 Route::get('category/edit/{id}', [CategoryController::class,'edit']);
 
-Route::get('/category/{id}/subcategory', [CategoryController::class,'showSubCategories']);
+Route::get('/category/{id}/subcategory', [SubCategoryController::class,'index']);
+
+//
+// Route::delete('/category/{categoryId}/subcategory/{subcategoryId}', [CategoryController::class,'destroySubCategory']);
 
 
-Route::get('/subcategory', [SubCategoryController::class, 'index']);
 
