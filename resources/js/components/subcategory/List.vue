@@ -84,7 +84,6 @@ export default {
                 const categoryId = currentUrl.split('/')[2];
                 const response = await axios.get(`http://localhost:8000/api/category/${categoryId}/subcategory`);
                 this.subcategories = response.data[0]['subcategories'];
-                console.log(this.subcategories);
             } catch (error) {
                 console.log(error);
                 this.subcategories = [];
@@ -92,15 +91,13 @@ export default {
         },
     
         deleteSubCategory(id) {
-            console.log(id);
-            // if (confirm("Are you sure to delete this category?")) {
-            //     axios.delete(`/api/category/delete/${id}`).then(response => {
-            //         this.getCategories();
-            //         console.log(this);
-            //     }).catch(error => {
-            //         console.log(error);
-            //     });
-            // }
+            if (confirm("Are you sure to delete this category?")) {
+                axios.delete(`/api/subcategory/${id}`).then(response => {
+                    window.location.reload()
+                }).catch(error => {
+                    console.log(error);
+                });
+            }
         }
         
     }

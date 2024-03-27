@@ -100,7 +100,6 @@ export default {
             if (confirm("Are you sure to delete this category?")) {
                 axios.delete(`/api/category/delete/${id}`).then(response => {
                     this.getCategories();
-                    console.log(this);
                 }).catch(error => {
                     console.log(error);
                 });

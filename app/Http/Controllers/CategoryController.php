@@ -64,61 +64,43 @@ class CategoryController extends Controller
     public function update($id ,Request $request)
     {
         $category = Category::where('id', $id)->update([ 
-            'title' => $request["category"]["title"],
+            'title'       => $request["category"]["title"],
             'description' => $request["category"]["description"],
-            'updated_at' => now()
+            'updated_at'  => now()
         ]); 
     
-        //saving for the subcategory 
-            foreach ($request['subcategories'] as $subcat) {
-                $subcategories[] = [
-                    'sub_title' => $subcat['subcategory'],
-                    'created_at' => now()
-                ];
-            }
-        SubCategory::insert($subcategories);
-            //code review ko maya
-            $category = Category::findOrFail($id);
-            $subcategoriesId = SubCategory::pluck('id');
-            // Retrieve the subcategory instances
-            $subcategories = SubCategory::find($subcategoriesId);
-            // Attach subcategories to the category
-            $category->subcategories()->attach($subcategories->pluck('id'));  
+        foreach ($request['subcategories'] as $subcat) {
+            $subcategories[] = [
+                'sub_title' => $subcat['subcategory'],
+            ];
+        }
+
+        $subCategoryIds = [];
+
+        foreach ($subcategories as $subcat) {
+            $subCategoryIds[] = \DB::table('sub_categories')->insertGetId($subcat);
+        }
+
+        $category = Category::findOrFail($id);
+        $category->subcategories()->attach($subCategoryIds);  
     }
         
-
     /**
      * Remove the specified resource from storage.
      */
     public function destroy($id)
     {
-        $category = Category::find($id)->delete();
-        return response()->json([
-            'message'=> 'Why mo naman delete? :(',
-            ]);
+        $category = Category::findOrFail($id);
+        $category->subcategories()->detach(); 
+        $category->delete();
+
+        return response()->json(['message' => 'Category deleted']);
     }
-
-
-    //
-    public function destroySubCategory($categoryId, $subcategoryId) {
-        dd($categoryId, $subcategoryId);
-        // $category->subcategories()->detach($subcategory->id);
-        // return response()->json();
-      }
-      
-    
 
     public function getCategoryTitle(Request $request)
     {
         $data = Category::get();
         return response()->json($data);
-    }
-
-    public function showSubCategories($id){
-        $categories = Category::where('id', $id)
-                                ->with('subcategories') 
-                                ->get();
-        return response()->json($categories);
     }
 
     

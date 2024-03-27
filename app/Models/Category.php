@@ -19,7 +19,7 @@ class Category extends Model {
 
    public function subcategories(): BelongsToMany //optional ang BelongsToMany 
    {
-       return $this->belongsToMany(SubCategory::class,'category_sub_category');
+       return $this->belongsToMany(SubCategory::class,'category_sub_category')->withTimestamps();
    }
 
    

@@ -104,6 +104,7 @@ export default {
 
 
             await axios.put(`/api/category/edit/${this.$route.params.id}`,this.model).then(response=>{
+                alert('Updated')
                 this.$router.push({name:"List"})
             }).catch(error=>{
                 console.log(error)
